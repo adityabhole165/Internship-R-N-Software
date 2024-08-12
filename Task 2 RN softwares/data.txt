@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Student Form</title>
+
+</head>
+<body>
+    <div class="container-lg mt-5 col-4 py-3 border border-dark">
+        <h2 class="text-center">Student data</h2>
+
+        <form action="insert.php" method="POST" >
+            <div class="form-group">
+                <label for="stud_id">Student ID</label>
+                <input type="text" class="form-control" id="stud_id" name="stud_id" placeholder="Enter Student ID" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_name">Name</label>
+                <input type="text" class="form-control" id="stud_name" name="stu_name" placeholder="Enter Student Name" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_mobile">Mobile</label>
+                <input type="text" class="form-control" id="stud_mobile" name="stu_mobile" placeholder="Enter Mobile Number" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_email">Email</label>
+                <input type="email" class="form-control" id="stud_email" name="stu_email" placeholder="Enter Email Address" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_address">Address</label>
+                <textarea class="form-control" id="stud_address" name="stu_address" placeholder="Enter Address" rows="3" required></textarea>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary"  type="submit" name="submit">Submit</button>
+            </div>
+            <div class="text-center mt-2 ">
+                <button class="btn btn-primary"  type="submit" name="back">Back</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+form.php
+
+
+<?php
+$server = "localhost";
+$username = "root";
+$password = "";
+$dbnm = "college1";
+
+// Establish the database connection
+$conn = mysqli_connect($server, $username, $password, $dbnm);
+if($conn->connect_error) {
+    die("Error connecting to server: ". $conn->connect_error);
+}
+
+// Define the SQL query
+$sql = "SELECT * FROM studentlist";
+
+// Execute the query
+$data = mysqli_query($conn, $sql);
+
+// Check if there are any results
+if (mysqli_num_rows($data) > 0) {
+    echo "<table border='1' cellpadding='5' cellspacing='0'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>";
+
+    // Fetch and display each row
+    while ($row = mysqli_fetch_array($data)) {
+        echo "<tr>
+            <td>".$row['stud_id']."</td>
+            <td>".$row['stud_name']."</td>
+            <td>".$row['stud_mobile']."</td>
+            <td>".$row['stud_email']."</td>
+            <td>".$row['stud_address']."</td>
+            <td>
+                <form method='POST' action='edit.php' style='display:inline;'>
+                    <input type='hidden' name='id' value='".$row['stud_id']."'>
+                    <button type='submit' style='background-color:blue;color:white;'>Edit</button>
+                </form>
+            </td>
+            <td>
+                <form method='POST' action='DeleteRec.php' style='display:inline;'>
+                    <input type='hidden' name='id' value='".$row['stud_id']."'>
+                    <button type='submit' style='background-color:red;color:white;'>Delete</button>
+                </form>
+            </td>
+        </tr>";
+    }
+    echo "</table>";
+} else {
+    echo "No records found";
+}
+
+mysqli_close($conn);
+?>
+display.php old
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Student Form</title>
+
+</head>
+<body>
+    <div class="container-lg mt-5 col-4 py-3 border border-dark">
+        <h2 class="text-center">Student data</h2>
+
+        <form action="insert.php" method="POST" >
+            <div class="form-group">
+                <label for="stud_id">Student ID</label>
+                <input type="text" class="form-control" id="stud_id" name="stud_id" placeholder="Enter Student ID" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_name">Name</label>
+                <input type="text" class="form-control" id="stud_name" name="stu_name" placeholder="Enter Student Name" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_mobile">Mobile</label>
+                <input type="text" class="form-control" id="stud_mobile" name="stu_mobile" placeholder="Enter Mobile Number" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_email">Email</label>
+                <input type="email" class="form-control" id="stud_email" name="stu_email" placeholder="Enter Email Address" required>
+            </div>
+            <div class="form-group">
+                <label for="stud_address">Address</label>
+                <textarea class="form-control" id="stud_address" name="stu_address" placeholder="Enter Address" rows="3" required></textarea>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary"  type="submit" name="submit">Submit</button>
+            </div>
+            <div class="text-center mt-2 ">
+                <button class="btn btn-primary"  type="submit" name="back">Back</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+form.php
+
+
+<?php
+$server = "localhost";
+$username = "root";
+$password = "";
+$dbnm = "college1";
+
+// Establish the database connection
+$conn = new mysqli($server, $username, $password, $dbnm);
+
+// Check the connection
+if($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if(isset($_POST['id'])) {
+    $id = $_POST['id'];
+
+    // Prepare the delete statement
+    $stmt = $conn->prepare("DELETE FROM studentlist WHERE stud_id = ?");
+    $stmt->bind_param("i", $id);
+
+    if($stmt->execute()) {
+        echo "Record deleted successfully.";
+    } else {
+        echo "Error deleting record: " . $stmt->error;
+    }
+
+    $stmt->close();
+} else {
+    echo "Invalid request.";
+}
+
+$conn->close();
+
+// Redirect back to the display page after deletion
+header("Location: display.php");
+exit();
+?>
+deleteREc.php
+
+<?php
+$server = "localhost";
+$username = "root";
+$password = "";
+$dbnm = "college1";
+
+// Establish the database connection
+$conn = mysqli_connect($server, $username, $password, $dbnm);
+if($conn->connect_error) {
+    die("Error connecting to server: ". $conn->connect_error);
+}
+
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
+    $name = $_POST['stu_name'];
+    $mobile = $_POST['stu_mobile'];
+    $email = $_POST['stu_email'];
+    $address = $_POST['stu_address'];
+
+    // Update the record
+    $sql = "UPDATE studentlist SET stud_name='$name', stud_mobile='$mobile', stud_email='$email', stud_address='$address' WHERE stud_id=$id";
+
+    if (mysqli_query($conn, $sql)) {
+        echo "Record updated successfully.";
+    } else {
+        echo "Error updating record: " . mysqli_error($conn);
+    }
+
+    // Redirect to display.php
+    header("Location: display.php");
+    exit();
+} else {
+    echo "Invalid Request.";
+}
+
+mysqli_close($conn);
+?>
+updateCode with pop up box
+
+<?php
+$server = "localhost";
+$username = "root";
+$password = "";
+$dbnm = "college1";
+
+// Establish the database connection
+$conn = new mysqli($server, $username, $password, $dbnm);
+
+// Check the connection
+if($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if(isset($_POST['id'])) {
+    $id = $_POST['id'];
+
+    // Prepare the delete statement
+    $stmt = $conn->prepare("DELETE FROM studentlist WHERE stud_id = ?");
+    $stmt->bind_param("i", $id);
+
+    if($stmt->execute()) {
+        echo "Record deleted successfully.";
+    } else {
+        echo "Error deleting record: " . $stmt->error;
+    }
+
+    $stmt->close();
+} else {
+    echo "Invalid request.";
+}
+
+$conn->close();
+updATE befor old for git
+
+
+
+display.php old without class
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Student List</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Add New Button and Heading -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="form.php" class="btn btn-success">Add New</a>
+            <h2 class="text-center w-100 mb-0">Student List</h2>
+        </div>
+
+        <?php
+        $server = "localhost";
+        $username = "root";
+        $password = "";
+        $dbnm = "college1";
+
+        // Establish the database connection
+        $conn = mysqli_connect($server, $username, $password, $dbnm);
+        if($conn->connect_error) {
+            die("Error connecting to server: ". $conn->connect_error);
+        }
+
+        // Define the SQL query
+        $sql = "SELECT * FROM studentlist";
+
+        // Execute the query
+        $data = mysqli_query($conn, $sql);
+
+        // Check if there are any results
+        if (mysqli_num_rows($data) > 0) {
+            echo "<div class='table-responsive'><table class='table table-bordered text-center'>
+            <thead class='thead-dark'>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>";
+
+            // Fetch and display each row
+            while ($row = mysqli_fetch_array($data)) {
+                echo "<tr>
+                    <td>".$row['stud_id']."</td>
+                    <td>".$row['stud_name']."</td>
+                    <td>".$row['stud_mobile']."</td>
+                    <td>".$row['stud_email']."</td>
+                    <td>".$row['stud_address']."</td>
+                    <td>
+                        <form method='POST' action='edit.php' style='display:inline;'>
+                            <input type='hidden' name='id' value='".$row['stud_id']."'>
+                            <button type='submit' class='btn btn-primary'>Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method='POST' action='DeleteRec.php' style='display:inline;'>
+                            <input type='hidden' name='id' value='".$row['stud_id']."'>
+                            <button type='submit' class='btn btn-danger'>Delete</button>
+                        </form>
+                    </td>
+                </tr>";
+            }
+            echo "</tbody></table></div>";
+        } else {
+            echo "<p class='text-center'>No records found</p>";
+        }
+
+        mysqli_close($conn);
+        ?>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+displayold
+
+<?php
+include('db.php');
+  if(isset($_POST['submit'])) {
+    $name = $_POST['stu_name'];
+    $year = $_POST['stud_year'];
+    $mobile = $_POST['stu_mobile'];
+    $email = $_POST['stu_email'];
+    $address = $_POST['stu_address'];
+
+    // Insert the data into the database
+    $sql = "INSERT INTO studentlist (stud_name, stud_year, stud_mobile, stud_email, stud_address) 
+            VALUES ('$name', '$year', '$mobile', '$email', '$address')";
+
+    $exe = mysqli_query($con,$sql);
+    if ($exe === true) {
+        echo "<script>
+                alert('Record submited successfully.');
+                window.location.href = 'display.php';
+              </script>";
+    } else {
+        echo "<script>
+                alert('Error inserting data: " . mysqli_error($con) . "');
+                window.histroy.back();
+              </script>";
+    }
+
+    // Close the database connection
+    mysqli_close($con);
+  }
+?>insert.php old
+
+
+
+
+

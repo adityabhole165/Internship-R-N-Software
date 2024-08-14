@@ -1,0 +1,17 @@
+CREATE TABLE `employeeinfo` (
+  `SR Name` int(100) NOT NULL,
+  `e_name` varchar(100) NOT NULL,
+  `e_design` varchar(100) NOT NULL,
+  `e_salary` float NOT NULL,
+  `e_address` varchar(200) NOT NULL,
+  `e_peradd` varchar(200) NOT NULL,
+  `e_aadharno` bigint(100) NOT NULL,
+  `e_pancard` varchar(50) NOT NULL,
+  `e_dob` varchar(20) NOT NULL,
+  `e_contact` bigint(10) NOT NULL,
+  `e_email` varchar(100) NOT NULL,
+  `e_fampersonNo` varchar(50) NOT NULL,
+  `e_famcontNo` bigint(10) NOT NULL,
+  `e_refername` varchar(50) NOT NULL,
+  `e_refercontact` bigint(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
